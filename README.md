@@ -6,7 +6,7 @@ To run my code, clone this repo and see the instructions in "project_assignment.
 
 The input data from LIDAR and RADAR measurements can be found in "data/obj_pose-laser-radar-synthetic-input.txt". My results for track one and two can be found in "data/obj_pose-laser-radar-ekf-output.txt" and "data/obj_pose-laser-radar-ekf-output2.txt," respectively. 
 
-Below for both tracks, I have plotted the measurements from both sensors in green, the ground truth position and velocity in blue, and the Kalman Filter's estimates in red. As you can see from the plots and the Root-Mean-Squared Error below the plots, the Kalman Filter does a good job of tracking moving objects. 
+Below for both tracks, I have plotted the measurements from both sensors in green, the ground truth position in blue, and the Kalman Filter's estimates in red. As you can see from the plots and the Root-Mean-Squared Error below the plots, the Kalman Filter does a good job of tracking moving objects. 
 
  <figure>
   <img src="readme_images/track1.png"/>
