@@ -34,7 +34,7 @@ public:
   virtual ~KalmanFilter();
 
   /**
-   * Init Initializes Kalman filter
+   * Init initializes Kalman filter
    * @param x_in Initial state
    * @param P_in Initial state covariance
    * @param F_in Transition matrix
@@ -46,7 +46,7 @@ public:
       Eigen::MatrixXd &H_in, Eigen::MatrixXd &R_in, Eigen::MatrixXd &Q_in);
 
   /**
-   * Prediction Predicts the state and the state covariance
+   * Prediction predicts the state and the state covariance
    * using the process model
    * @param delta_T Time between k and k+1 in s
    */

@@ -4,6 +4,7 @@
 #include <math.h>
 #include "FusionEKF.h"
 #include "tools.h"
+#include <fstream>
 
 using namespace std;
 
@@ -65,32 +66,34 @@ int main()
     	  // reads first element from the current line
     	  string sensor_type;
     	  iss >> sensor_type;
-
+        float px;
+        float py;
     	  if (sensor_type.compare("L") == 0) {
       	  		meas_package.sensor_type_ = MeasurementPackage::LASER;
           		meas_package.raw_measurements_ = VectorXd(2);
-          		float px;
-      	  		float py;
           		iss >> px;
           		iss >> py;
           		meas_package.raw_measurements_ << px, py;
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
-          } else if (sensor_type.compare("R") == 0) {
-
+          }
+        else if (sensor_type.compare("R") == 0) {
       	  		meas_package.sensor_type_ = MeasurementPackage::RADAR;
-          		meas_package.raw_measurements_ = VectorXd(3);
+          		meas_package.raw_measurements_ = VectorXd(5);
           		float ro;
       	  		float theta;
       	  		float ro_dot;
           		iss >> ro;
           		iss >> theta;
           		iss >> ro_dot;
-          		meas_package.raw_measurements_ << ro,theta, ro_dot;
+              // calculate measured px and py here so we can easily write them to the output file below
+              px = ro*cos(theta);
+              py = ro*sin(theta);
+              meas_package.raw_measurements_ << ro,theta, ro_dot, px, py;
           		iss >> timestamp;
           		meas_package.timestamp_ = timestamp;
           }
-          float x_gt;
+        float x_gt;
     	  float y_gt;
     	  float vx_gt;
     	  float vy_gt;
@@ -122,8 +125,15 @@ int main()
     	  estimate(2) = v1;
     	  estimate(3) = v2;
     	  
+        // Create an output text file, and write to it estimated px, py, vx, vy, measurements of px and py, and groundtruth x, y, vx, vy
+        ofstream myFile;
+        myFile.open ("obj_pose-laser-radar-ekf-output.txt", ios::out | ios::app | ios::binary);
+        myFile << p_x << "\t" << p_y << "\t" << v1 << "\t" << v2 << "\t";
+        myFile << px << "\t" << py << "\t";
+        myFile << x_gt << "\t" << y_gt << "\t" << vx_gt << "\t" << vy_gt << "\n";
+        myFile.close();
+          
     	  estimations.push_back(estimate);
-
     	  VectorXd RMSE = tools.CalculateRMSE(estimations, ground_truth);
 
           json msgJson;
